@@ -1,0 +1,701 @@
+ADJACENCY MATRIX 
+
+#include<iostream>
+using namespace std;
+class graph
+{
+int adjmat[10][10];
+public:
+    void initgraph();
+    void displayg(int v,int e);
+    void scangraph(int v,int e);
+};
+
+void graph::initgraph()   //constuctor to intialize Graph
+    {
+    int i,j;
+    for(i=0;i<10;i++)
+    {
+    for(j=0;j<10;j++)
+        adjmat[i][j]=0;
+    }
+    }
+
+void graph::displayg(int v,int e)
+    {
+    int i,j;
+    for(i=0;i<v;i++)
+    {
+    cout<<endl;
+    for(j=0;j<v;j++)
+        cout<<adjmat[i][j]<<" ";
+    }
+    }
+
+void graph::scangraph(int v ,int e)
+{
+int i,s,d;
+
+cout<<"please enter source and destination of the edge(vertex no must be between 1 to"<<v<<")";
+for(i=0;i<e;i++)
+{
+l1:
+ cout<<endl<<"Edge no ->  "<<i+1<<endl;
+ cout<<"Source Vertex->";
+ cin>>s;
+ cout<<"Destination Vertex-> ";
+ cin>>d;
+ if((s>=1 && s<=v) && (d>=1 && d<=v))
+{
+    if((adjmat[s-1][d-1]==0) && (adjmat[d-1][s-1] == 0))
+    {
+        adjmat[s-1][d-1]=1;
+    }
+    else
+    {
+    cout<<"Edge already exist";
+         goto l1;
+    }
+}
+else
+{
+   cout<<"Please Enter correct vertex no's";
+     goto l1;   
+}
+}
+}
+int main()
+{
+int ch,cont,v,e;
+graph g1;
+do
+{
+cout<<endl<<"Menu";
+cout<<endl<<"1.Create Graph using adjacency matrix";
+cout<<endl<<"2.Display Graph";
+cout<<endl<<"Enter Choice";
+cin>>ch;
+switch(ch)
+{
+case 1:
+    g1.initgraph();
+    cout<<"No of Vertices ?";
+    cin>>v;
+    cout<<"No of edges ?";
+    cin>>e;
+    g1.scangraph(v,e);
+    break;
+case 2:
+    g1.displayg(v,e);
+    break;
+}
+cout<<"do u want to continue?(1 for continue)";
+cin>>cont;
+}while(cont==1);
+return 0;
+}
+*****************************************************************************************
+
+
+ADJACENCY LIST
+
+#include<iostream>
+#include<string>
+using namespace std;
+struct edge
+{
+char dest;
+int cost;
+struct edge *link;
+};
+
+struct node
+{
+  struct node *next;
+  char name;
+  struct edge *adj;
+};
+
+class graph
+{
+node *start;
+
+public:
+    graph()
+    {
+    start=NULL;
+    }
+    void displayg(int v,int e);
+    void scangraph(int v,int e);
+};
+
+    void graph::displayg(int v,int e)
+    {
+    node *ptr;
+    edge *p;
+    ptr=start;
+    while(ptr!=NULL)
+    {
+         cout<<endl;
+         cout<<ptr->name;
+         p=ptr->adj;
+         while(p!=NULL)
+        {
+        cout<<"--> "<<p->dest<<" & cost" <<p->cost;
+        p=p->link;
+        }
+        ptr=ptr->next;
+        if(ptr!=NULL)
+             cout<<endl<<"|";
+    }
+    }
+
+void graph::scangraph(int v ,int e)
+{
+int i,cost;
+char s,d;
+int n=65;
+node *ptr,*bptr;
+edge *p,*bp;
+    for(i=0;i<v;i++)  // for creating list of verices
+    {
+        ptr = new node;
+        ptr->name=(65+i);
+        ptr->next=NULL;
+        ptr->adj=NULL;   
+        if(start==NULL)
+        {
+         start =ptr;
+        }
+        else
+        {
+        bptr=start;
+        while(bptr->next!=NULL)
+          bptr=bptr->next;
+        bptr->next=ptr;
+        }
+    }
+    cout<<endl<<"please enter source city and destination  city";
+    cout<<"starting from A upto number of cities like A,B,C,D";
+    for(i=0;i<e;i++)
+    {
+    l1:
+     cout<<endl<<"Edge no ->  "<<i+1<<endl;
+      cout<<"Source city->";
+     cin>>s;
+      cout<<"Destination city-> ";
+     cin>>d;
+      cout<<"cost->";
+     cin>>cost;
+
+     if((s>=65 && s<(65+v)) && (d>=65 && d<(65+v)))
+     {
+        bptr=start;
+         while(bptr->name!=s)
+       	 bptr=bptr->next;
+     if(bptr!=NULL)
+     {
+         p =new edge;
+       p->dest=d;
+       p->cost=cost;
+       p->link=NULL;
+           bp=bptr->adj;
+       if(bp==NULL)
+              bptr->adj=p;
+       else
+       {       
+         while(bp->link!=NULL)
+             bp=bp->link;
+                bp->link=p;   
+       }
+     }
+     }
+     else
+    {
+       cout<"Please Enter correct vertex no's";
+         goto l1;   
+    }
+    }
+}
+
+int main()
+{
+int ch,cont,v,e;
+graph g1;
+do
+{
+cout<<endl<<"Menu";
+cout<<endl<<"1.Create Graph using adjacency List";
+cout<<endl<<"2.Display Graph";
+cout<<endl<<"Enter Choice";
+cin>>ch;
+switch(ch)
+{
+case 1:
+
+    cout<<"No of Cities ?";
+    cin>>v;
+    cout<<"No of Flights?";
+    cin>>e;
+    g1.scangraph(v,e);
+    break;
+case 2:
+    g1.displayg(v,e);
+    break;
+}
+cout<<endl<<"do u want to continue?(1 for continue)";
+cin>>cont;
+}while(cont==1);
+return 0;
+}
+
+************************************************************************************
+DFS AND BFS
+
+
+#include <iostream>
+int st[10],top=-1,Q[10],front =-1,rear=-1;
+
+void insertQ(int v)
+{
+    if(rear==-1)  //insertning first element
+     {
+         rear=front=0;
+         Q[rear]=v;
+         
+     }
+     else if(rear<=8)
+     {
+         Q[++rear]=v;
+     }
+     else
+     {
+         std::cout<<"Q full";
+     }
+}
+
+int deleteQ()
+{
+    int v=-1;
+    if(front==-1)
+      std::cout<<"\n Q empty";
+    else
+    {
+         v=Q[front];
+         front++;
+    }
+      return v;
+}
+
+void push(int v)
+{
+    if(top<=9)
+      st[++top]=v;
+     else
+     std::cout<<"stack full";
+}
+
+int pop()
+{
+    int v =-1;
+    if(top!=-1)
+    {
+        v=st[top];
+      top--;
+    }
+    else
+     {
+         std::cout<<"stack empty ";
+     }
+     return v;
+}
+
+
+
+int main()
+{
+    int V,E;
+    char Dir;
+    std::cout<<"How many Vertices ?";
+    std::cin>>V;
+    int adjMat[V+1][V+1];
+   
+    for(int i =1;i<=V;i++)
+    {
+      for(int j =1;j<=V;j++)
+      {
+          adjMat[i][j]=0;
+      }
+         
+    }
+   
+    std::cout<<"How many Edges ?";
+    std::cin>>E;
+    std::cout<<"Graph is Directed /Undirected ? D/U";
+    std::cin>>Dir;
+    std::cout<<"enter edges of the graph";
+    int s,d,wt;
+    for(int i =0;i<E;i++)
+    {
+        std::cout<<"Enter source,destination and wt of the edge - "<<i+1;
+        std::cin>>s>>d>>wt;
+        if((s>=1 && s<=V)&&(d>=1 && d<=V))
+        {
+            adjMat[s][d]=wt;
+            if(Dir=='U')
+            {
+                adjMat[d][s]=wt;
+            }
+        }
+        else
+        {
+            std::cout<< "\nPlease enter valid source and destination for edge";
+            i--;
+        }
+    }
+   
+    std::cout<<std::endl<<"Adjcancy Matrix is : - "<<std::endl;
+      for(int i =1;i<=V;i++)
+      {
+          std::cout<<"\n";
+      for(int j =1;j<=V;j++)
+      {
+          std::cout<<adjMat[i][j]<<" ";
+      }
+         
+      }
+     
+     
+      //Code for DFS
+     int visited[V+1],sv;
+     for(int i=1;i<=V;i++)
+         visited[i]=0;
+         
+     std::cout<<"From where to start dfs traversal";
+     std::cin>>sv;
+     std::cout<<"\nDFS Traversal is \n" ;
+     push(sv);
+     while(top!=-1)
+     {
+         sv=pop();
+         if(visited[sv]==0)
+         {
+             std::cout<<sv<<" "; //printing vertex because not visited
+             visited[sv]=1;  //Marking it as visited
+             for(int i =1;i<=V;i++)
+             {
+                 if(adjMat[sv][i]>0)   /// pushing adjacent vertices
+                   push(i);
+             }
+         }
+     }
+     //code for bfs
+     
+     std::cout<<"From where to start Bfs traversal";
+     std::cin>>sv;
+     
+     for(int i=1;i<=V;i++)
+         visited[i]=0;
+     
+     std::cout<<"\nBFS Traversal is \n" ;
+     insertQ(sv);
+     visited[sv]=1;
+     std::cout<<sv<<" ";
+     while(front!=rear+1)
+     {
+         sv=deleteQ();
+     
+             for(int i =1;i<=V;i++)
+             {
+                 if((adjMat[sv][i]>0)  &&(visited[i]==0))  /// pushing adjacent vertices
+                   {
+                       std::cout<<i<<" ";
+                       insertQ(i);
+                       visited[i]=1;
+                   }
+             }
+         
+     }
+
+
+    return 0;
+}
+
+***********************************************************************************
+PRIMS
+
+#include<iostream>
+using namespace std;
+struct node
+{
+int pred;
+int dist;
+int stat;
+};
+
+struct edge
+{
+int u,v;
+};
+class graph
+{
+int adjmat[10][10];
+struct node state[10];
+struct edge tree[10];
+int wt;
+public:
+    graph()
+    {
+     wt=0;
+    }
+    int allperm(int);
+    void initgraph();   //initailize matrix with 0
+    void displayg(int v,int e); // display adj mat
+    void scangraph(int v,int e); // input graph
+    void span(int v,int e);
+};
+
+int graph::allperm(int v)
+{
+
+int i;
+for(i=0;i<v;i++)
+   if(state[i].stat==0)
+     return 0;
+return 1;
+}
+
+void graph::span(int v,int e)
+{
+
+int current,count,min,u1,v1;
+    for(int i=0;i<v;i++)
+    {
+    state[i].pred=0;
+    state[i].dist=999;
+    state[i].stat=0; //0  means not visited
+    }
+    state[0].pred=0;
+    state[0].dist=0;
+    state[0].stat=1;
+    current=0;
+    count=0;
+    while(allperm(v)!=1)
+    {
+        for(int i=0;i<v;i++)
+        {
+            if(adjmat[current][i]>0 && state[i].stat==0)
+            {
+                if(adjmat[current][i]< state[i].dist)
+                {
+                    state[i].pred=current;
+                    state[i].dist=adjmat[current][i];
+                }           
+            }
+        }
+        min =999;
+        for(int i=0;i<v;i++)
+        {
+             if(state[i].stat ==0 && state[i].dist < min)
+            {
+            min=state[i].dist;
+            current=i;
+            }
+        }       
+        cout<<endl<<"current"<<current;   
+        state[current].stat=1;
+        u1=state[current].pred;
+        v1=current;
+        tree[count].u=u1;
+        tree[count].v=v1;
+        count++;
+
+        wt=wt+ adjmat[u1][v1];
+    }
+
+    cout<<endl<<"set of lines for connecting city with min. cost is"<<endl;
+    for(int i=0;i<count;i++)
+     {
+        cout<<"city"<<tree[i].u+1<<"->";
+        cout<<"city"<<tree[i].v+1<<endl;
+     }
+}
+void graph::initgraph()   //constuctor to intialize Graph
+    {
+    int i,j;
+    for(i=0;i<10;i++)
+    {
+    for(j=0;j<10;j++)
+        adjmat[i][j]=0;
+    }
+    }
+
+void graph::displayg(int v,int e)
+    {
+    int i,j;
+    for(i=0;i<v;i++)
+    {
+    cout<<endl;
+    for(j=0;j<v;j++)
+        cout<<adjmat[i][j]<<" ";
+    }
+    }
+
+void graph::scangraph(int v ,int e)
+{
+int i,s,d,cost;
+
+cout<<"please enter source city and destination city  of the edge(city no must be between 1 to"<<v<<")";
+for(i=0;i<e;i++)
+{
+l1:
+ cout<<endl<<"Edge no ->  "<<i+1<<endl;
+ cout<<"Source city->";
+ cin>>s;
+ cout<<"Destination city-> ";
+ cin>>d;
+ cout<<"Cost of Conecting 2 city";
+ cin>>cost;
+ if((s>=1 && s<=v) && (d>=1 && d<=v))
+{
+    if((adjmat[s-1][d-1]==0) && (adjmat[d-1][s-1] == 0))
+    {
+        adjmat[s-1][d-1]=cost;
+        adjmat[d-1][s-1]=cost;
+    }
+    else
+    {
+    cout<<"Edge already exist";
+         goto l1;
+    }
+}
+else
+{
+   cout<<"Please Enter correct vertex no's";
+     goto l1;   
+}
+}
+}
+int main()
+{
+int ch,cont,v,e;
+graph g1;
+do
+{
+cout<<endl<<"Menu";
+cout<<endl<<"1.Create Graph for offices ";
+cout<<endl<<"2.Display Graph";
+cout<<endl<<"3.min cost cities";
+cout<<endl<<"Enter Choice";
+cin>>ch;
+switch(ch)
+{
+case 1:
+    g1.initgraph();
+    cout<<"No of offices ?";
+    cin>>v;
+    cout<<"No of leased line ?";
+    cin>>e;
+    g1.scangraph(v,e);
+    break;
+case 2:
+    g1.displayg(v,e);
+    break;
+case 3:
+    g1.span(v,e);
+    break;
+
+}
+cout<<"do u want to continue?(1 for continue)";
+cin>>cont;
+}while(cont==1);
+return 0;
+}
+
+*****************************************************************************************
+HASHING
+
+
+#include <iostream>
+
+class hashing
+{
+    int hashtable[11],key;
+   
+public:
+    hashing()
+        {
+            for(int i=0;i<11;i++)
+              hashtable[i]=-1;
+           
+        }
+       
+        int hashFns(int key)
+        {
+            return key%11;
+           
+        }
+       
+  void  linearProblingWithoutReplace()
+    {
+        std::cout<<"Enter Key to be inserted in hash table";
+        std::cin>>key;
+        int hadd =hashFns(key);
+        if(hashtable[hadd]==-1)
+            hashtable[hadd]=key;
+        else
+        {
+            int j=hadd+1;
+            while(hashtable[j]!=-1 && j!=hadd)
+            {
+                j=(j+1)%11;
+            }
+            hashtable[j]=key;
+        }
+           
+    }
+   
+    int searchHash(int key)
+    {
+        int hadd=hashFns(key);
+        if(hashtable[hadd]==key)
+        {
+            std::cout<<"found at location :: "<<hadd;
+            return 1;
+        }
+        else
+        {
+            int j =hadd+1;
+            while(j!=hadd && hashtable[j]!=-1)
+            {  
+                if(hashtable[j]==key)
+                {
+                     std::cout<<"found at location :: "<<j;
+                    return 1;
+                }
+                j=(j+1)%11;
+            }
+             std::cout<<"not found ";
+            return 0;
+        }
+    }
+    void displayTable()
+    {
+        for(int i=0;i<11;i++)
+         std::cout<<hashtable[i]<<std::endl;
+    }
+};
+
+int main()
+{
+   hashing h1;
+   h1.linearProblingWithoutReplace();
+    h1.linearProblingWithoutReplace();
+ h1.linearProblingWithoutReplace();
+  h1.linearProblingWithoutReplace();
+   h1.linearProblingWithoutReplace();
+   h1.displayTable();
+   h1.searchHash(67);
+   
+    return 0;
+}
