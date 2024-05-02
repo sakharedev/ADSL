@@ -25,7 +25,7 @@ int main()
     {
         cout<<"Enter source destination and weight of edge "<<i+1<<": ";
         cin>>source>>destinition>>weight;
-        if (source >= i+1 && source <= vertices && destinition >= i+1 && destinition <= vertices)
+        if (source >= 1 && source <= vertices && destinition >= 1 && destinition <= vertices)
         {
             adjMat[source-1][destinition-1] = weight;
             if(Dir == 'U')
