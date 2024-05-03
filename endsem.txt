@@ -1,0 +1,2423 @@
+Q1
+A) Create binary tree and perform In-order, Preorder and Post-order non recursive traversal.
+C) Create binary tree and perform In-order, Preorder and Post-order recursive traversal.
+#include<iostream>
+using namespace std;
+class Node
+{
+    public:
+    int data;
+    Node *left, *right;
+};
+class BTree
+{
+    Node *root;
+    public:
+    BTree()
+    {
+        root = NULL;
+    }
+
+    Node *getnode()
+    {
+        Node *temp = new Node;
+        cout << "Enter data: ";
+        cin >> temp->data;
+        temp->left = temp->right = NULL;
+        return temp;
+    }
+    void create()
+    {
+        int ch;
+        do
+        {
+            Node *newnode = getnode();
+            if (root == NULL)
+            {
+                root = newnode;
+            }
+            else
+            {
+                ins(root, newnode);
+            }
+            cout << "Enter 1 to repeat: ";
+            cin >> ch;
+        } while (ch == 1);
+    }
+    void ins(Node *r, Node *newnode)
+    {
+        Node *temp;
+        char dir;
+    L:
+        cout << "\nWhere do you want to insert the node (L/R): ";
+        cin >> dir;
+
+        if (dir == 'L')
+        {
+            if (r->left != NULL)
+            {
+                r = r->left;
+                goto L;
+            }
+            else
+            {
+                r->left = newnode;
+            }
+        }
+        else if (dir == 'R')
+        {
+            if (r->right != NULL)
+            {
+                r = r->right;
+                goto L;
+            }
+            else
+            {
+                r->right = newnode;
+            }
+        }
+        else
+        {
+            cout << "Invalid Entry";
+            goto L;
+        }
+    }
+    void inorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            inorder(r->left);
+            cout << r->data << " ";
+            inorder(r->right);
+        }
+    }
+
+    void preorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            cout << r->data << " ";
+            preorder(r->left);
+            preorder(r->right);
+        }
+    }
+    void postorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            postorder(r->left);
+            postorder(r->right);
+            cout << r->data << " ";
+        }
+    }
+    void inorderwrap()
+    {
+        inorder(root);
+        cout << endl;
+    }
+    void preorderwrap()
+    {
+        preorder(root);
+        cout << endl;
+    }
+    void postorderwrap()
+    {
+        postorder(root);
+        cout << endl;
+    }
+};
+int main()
+{
+    BTree e;
+    int a, ch, s, d;
+    e.create();
+    cout << "Inorder Traversal of the Tree:- \n";
+    e.inorderwrap();
+    cout << "Preorder Traversal of the Tree:- \n";
+    e.preorderwrap();
+    cout << "Postorder Traversal of the Tree:- \n";
+    e.postorderwrap();
+    return 0;
+}
+--------------------------------------------------------------------------------------------------------------------------------
+B) Create binary tree. Find height of the tree and print leaf nodes. Find mirror image, print original and mirror image using level-wise printing
+
+#include <iostream>
+using namespace std;
+
+class Node
+{
+public:
+    int data;
+    Node *left, *right;
+};
+
+class BTree
+{
+private:
+    Node *root;
+
+public:
+    BTree()
+    {
+        root = NULL;
+    }
+
+    Node *get_root() const
+    {
+        return root;
+    }
+
+    Node *getnode()
+    {
+        Node *temp = new Node;
+        cout << "Enter data: ";
+        cin >> temp->data;
+        temp->left = temp->right = NULL;
+        return temp;
+    }
+
+    void create()
+    {
+        int ch;
+        do
+        {
+            Node *newnode = getnode();
+            if (root == NULL)
+            {
+                root = newnode;
+            }
+            else
+            {
+                ins(root, newnode);
+            }
+            cout << "Enter 1 to repeat: ";
+            cin >> ch;
+        } while (ch == 1);
+    }
+
+    void ins(Node *r, Node *newnode)
+    {
+        Node *temp;
+        char dir;
+    L:
+        cout << "\nWhere do you want to insert the node (L/R): ";
+        cin >> dir;
+
+        if (dir == 'L')
+        {
+            if (r->left != NULL)
+            {
+                r = r->left;
+                goto L;
+            }
+            else
+            {
+                r->left = newnode;
+            }
+        }
+        else if (dir == 'R')
+        {
+            if (r->right != NULL)
+            {
+                r = r->right;
+                goto L;
+            }
+            else
+            {
+                r->right = newnode;
+            }
+        }
+        else
+        {
+            cout << "Invalid Entry";
+            goto L;
+        }
+    }
+
+    void inorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            inorder(r->left);
+            cout << r->data << " ";
+            inorder(r->right);
+        }
+    }
+
+    void preorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            cout << r->data << " ";
+            preorder(r->left);
+            preorder(r->right);
+        }
+    }
+
+    void postorder(Node *r)
+    {
+        if (r != NULL)
+        {
+            postorder(r->left);
+            postorder(r->right);
+            cout << r->data << " ";
+        }
+    }
+
+    void level_order()
+    {
+        if (root == NULL)
+            return;
+
+        // Implement level order traversal without using queue
+        int h = height(root);
+        for (int i = 1; i <= h; i++)
+            printGivenLevel(root, i);
+    }
+
+    int height(Node *node)
+    {
+        if (node == NULL)
+            return 0;
+        else
+        {
+            int lheight = height(node->left);
+            int rheight = height(node->right);
+
+            if (lheight > rheight)
+                return (lheight + 1);
+            else
+                return (rheight + 1);
+        }
+    }
+
+    void printGivenLevel(Node *root, int level)
+    {
+        if (root == NULL)
+            return;
+        if (level == 1)
+            cout << root->data << " ";
+        else if (level > 1)
+        {
+            printGivenLevel(root->left, level - 1);
+            printGivenLevel(root->right, level - 1);
+        }
+    }
+
+    void print_leaf_nodes(Node *r)
+    {
+        if (r == NULL)
+            return;
+
+        if (r->left == NULL && r->right == NULL)
+            cout << r->data << " ";
+
+        print_leaf_nodes(r->left);
+        print_leaf_nodes(r->right);
+    }
+
+    Node *mirror_image(Node *r)
+    {
+        if (r == NULL)
+            return NULL;
+
+        Node *temp = r->left;
+        r->left = mirror_image(r->right);
+        r->right = mirror_image(temp);
+
+        return r;
+    }
+
+    void print_mirror_image(Node *r)
+    {
+        if (r == NULL)
+            return;
+
+        cout << "Mirror Image (Level-wise): ";
+        level_order();
+        cout << endl;
+    }
+
+    void print_original_and_mirror_image()
+    {
+        cout << "Original Tree (Level-wise): ";
+        level_order();
+        cout << endl;
+
+        Node *mirror_root = mirror_image(root);
+        cout << "Mirror Image (Level-wise): ";
+        level_order();
+        cout << endl;
+    }
+};
+
+int main()
+{
+    BTree e;
+    int a, ch, s, d;
+    e.create();
+
+    cout << "Inorder Traversal of the Tree:- ";
+    e.inorder(e.get_root());
+    cout << endl;
+
+    cout << "Level Order Traversal of the Tree:- ";
+    e.level_order();
+    cout << endl;
+
+    cout << "Height of the Tree: " << e.height(e.get_root()) << endl;
+
+    cout << "Leaf Nodes: ";
+    e.print_leaf_nodes(e.get_root());
+    cout << endl;
+
+    e.print_original_and_mirror_image();
+
+    return 0;
+}
+----------------------------------------------------------------------
+
+
+
+Q2
+A and B) Accept Prefix expression and construct a binary tree and perform inorder & postorder traversal
+
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    char data;
+    Node *left, *right;
+
+    Node(char value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class ExpressionTree {
+private:
+    Node *root;
+
+public:
+    ExpressionTree() : root(nullptr) {}
+
+    bool isOperator(char c) {
+        return (c == '+' || c == '-' || c == '*' || c == '/');
+    }
+
+    void constructTree(string prefix) {
+        Node *stk[100]; // Array to simulate stack, assuming max size 100
+        int top = -1;
+
+        for (int i = prefix.length() - 1; i >= 0; i--) {
+            char symbol = prefix[i];
+
+            if (isOperator(symbol)) {
+                Node *newNode = new Node(symbol);
+                newNode->right = stk[top--]; // Reverse the order of pushing left and right
+                newNode->left = stk[top--];
+                stk[++top] = newNode;
+            } else {
+                Node *operandNode = new Node(symbol);
+                stk[++top] = operandNode;
+            }
+        }
+
+        root = stk[top];
+    }
+
+    void inorderTraversal(Node *root) {
+        if (root != nullptr) {
+            inorderTraversal(root->right); // Reverse inorder traversal
+            cout << root->data << " ";
+            inorderTraversal(root->left); // Reverse inorder traversal
+        }
+    }
+
+    void postorderTraversal(Node *root) {
+        if (root != nullptr) {
+            postorderTraversal(root->right); // Reverse postorder traversal
+            postorderTraversal(root->left); // Reverse postorder traversal
+            cout << root->data << " ";
+        }
+    }
+
+    void performTraversals() {
+        cout << "Inorder Traversal: ";
+        inorderTraversal(root);
+        cout << endl;
+
+        cout << "Postorder Traversal: ";
+        postorderTraversal(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    ExpressionTree expTree;
+    string prefixExpression;
+
+    cout << "Enter the Prefix Expression: ";
+    getline(cin, prefixExpression);
+
+    expTree.constructTree(prefixExpression);
+    cout << "Expression Tree constructed successfully.\n";
+
+    expTree.performTraversals();
+
+    return 0;
+}
+----------------------------------------------------------------------
+
+
+
+C) Accept Postfix expression and construct a binary tree and perform inorder & preorder traversal.(recursive)
+
+
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    char data;
+    Node *left, *right;
+
+    Node(char value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class ExpressionTree {
+private:
+    Node *root;
+    Node* nodeStack[100]; // Array to simulate stack, assuming max size 100
+    int top;
+
+public:
+    ExpressionTree() : root(nullptr), top(-1) {}
+
+    bool isOperator(char c) {
+        return (c == '+' || c == '-' || c == '*' || c == '/');
+    }
+
+    void constructTree(const string& postfix) {
+        for (char symbol : postfix) {
+            if (isspace(symbol)) {
+                continue;  // Skip spaces
+            }
+
+            if (isOperator(symbol)) {
+                Node *newNode = new Node(symbol);
+                newNode->right = nodeStack[top--]; // Reverse the order of pushing left and right
+                newNode->left = nodeStack[top--];
+                nodeStack[++top] = newNode;
+            } else {
+                Node *operandNode = new Node(symbol);
+                nodeStack[++top] = operandNode;
+            }
+        }
+
+        root = nodeStack[top];
+    }
+
+    void inorderTraversal(Node *root) {
+        if (root != nullptr) {
+            inorderTraversal(root->left);
+            cout << root->data << " ";
+            inorderTraversal(root->right);
+        }
+    }
+
+    void preorderTraversal(Node *root) {
+        if (root != nullptr) {
+            cout << root->data << " ";
+            preorderTraversal(root->left);
+            preorderTraversal(root->right);
+        }
+    }
+
+    void performTraversals() {
+        cout << "Inorder Traversal: ";
+        inorderTraversal(root);
+        cout << endl;
+
+        cout << "Preorder Traversal: ";
+        preorderTraversal(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    ExpressionTree expTree;
+    string postfixExpression;
+
+    cout << "Enter the Postfix Expression: ";
+    getline(cin, postfixExpression);
+
+    expTree.constructTree(postfixExpression);
+    cout << "Expression Tree constructed successfully.\n";
+
+    expTree.performTraversals();
+
+    return 0;
+}
+----------------------------------------------------------------------
+
+
+
+Q3
+A) Create Binary Search Tree(BST).Find height of the tree and print leaf nodes. Find mirror image, print original and mirror image using level-wise printing.
+
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node *left, *right;
+
+    Node(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BST {
+private:
+    Node *root;
+
+public:
+    BST() : root(nullptr) {}
+
+    Node *insert(Node *node, int value) {
+        if (node == nullptr) {
+            return new Node(value);
+        }
+
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        }
+
+        return node;
+    }
+
+    void insert(int value) {
+        root = insert(root, value);
+    }
+
+    int findHeight(Node *node) {
+        if (node == nullptr) {
+            return 0;
+        }
+
+        int leftHeight = findHeight(node->left);
+        int rightHeight = findHeight(node->right);
+
+        return max(leftHeight, rightHeight) + 1;
+    }
+
+    void printLeafNodes(Node *node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->left == nullptr && node->right == nullptr) {
+            cout << node->data << " ";
+        }
+
+        printLeafNodes(node->left);
+        printLeafNodes(node->right);
+    }
+
+    Node *mirrorImage(Node *node) {
+        if (node == nullptr) {
+            return nullptr;
+        }
+
+        Node *temp = node->left;
+        node->left = mirrorImage(node->right);
+        node->right = mirrorImage(temp);
+
+        return node;
+    }
+
+    void printLevelWise(Node *node) {
+        if (node == nullptr) {
+            return;
+        }
+
+        // Use two arrays to store the nodes of each level
+        Node *currentLevel[100];
+        Node *nextLevel[100];
+
+        int currentLevelSize = 0;
+        int nextLevelSize = 0;
+
+        currentLevel[currentLevelSize++] = node;
+
+        while (currentLevelSize > 0) {
+            for (int i = 0; i < currentLevelSize; i++) {
+                Node *current = currentLevel[i];
+                cout << current->data << " ";
+
+                if (current->left) {
+                    nextLevel[nextLevelSize++] = current->left;
+                }
+
+                if (current->right) {
+                    nextLevel[nextLevelSize++] = current->right;
+                }
+            }
+            cout << endl;
+
+            // Swap the current level with the next level
+            swap(currentLevel, nextLevel);
+            currentLevelSize = nextLevelSize;
+            nextLevelSize = 0;
+        }
+    }
+
+    void printOriginalAndMirror() {
+        cout << "Original Tree (Level-wise):" << endl;
+        printLevelWise(root);
+
+        Node *mirrorRoot = mirrorImage(root);
+
+        cout << "\nMirror Image Tree (Level-wise):" << endl;
+        printLevelWise(mirrorRoot);
+    }
+
+    void performOperations() {
+        cout << "BST created with user input.\n";
+
+        cout << "Height of the tree: " << findHeight(root) << endl;
+
+        cout << "Leaf Nodes: ";
+        printLeafNodes(root);
+        cout << endl;
+
+        printOriginalAndMirror();
+    }
+};
+
+int main() {
+    BST bst;
+    int n, value;
+
+    cout << "Enter the number of nodes in the BST: ";
+    cin >> n;
+
+    cout << "Enter the values of the nodes:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> value;
+        bst.insert(value);
+    }
+
+    bst.performOperations();
+
+    return 0;
+}
+----------------------------------------------------------------------
+B) Construct Binary Search Tree and find the min and max value of BST.
+
+#include <iostream>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node *left, *right;
+
+    Node(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BST {
+private:
+    Node *root;
+
+public:
+    BST() : root(nullptr) {}
+
+    Node *insert(Node *node, int value) {
+        if (node == nullptr) {
+            return new Node(value);
+        }
+
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        }
+
+        return node;
+    }
+
+    void insert(int value) {
+        root = insert(root, value);
+    }
+
+    int findMin(Node *node) {
+        if (node == nullptr) {
+            throw runtime_error("BST is empty.");
+        }
+
+        while (node->left != nullptr) {
+            node = node->left;
+        }
+
+        return node->data;
+    }
+
+    int findMax(Node *node) {
+        if (node == nullptr) {
+            throw runtime_error("BST is empty.");
+        }
+
+        while (node->right != nullptr) {
+            node = node->right;
+        }
+
+        return node->data;
+    }
+
+    void performOperations() {
+        cout << "BST created with user input.\n";
+
+        try {
+            int minValue = findMin(root);
+            int maxValue = findMax(root);
+
+            cout << "Minimum value in BST: " << minValue << endl;
+            cout << "Maximum value in BST: " << maxValue << endl;
+        } catch (const runtime_error& e) {
+            cerr << e.what() << endl;
+        }
+    }
+};
+
+int main() {
+    BST bst;
+    int n, value;
+
+    cout << "Enter the number of nodes in the BST: ";
+    cin >> n;
+
+    cout << "Enter the values of the nodes:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> value;
+        bst.insert(value);
+    }
+
+    bst.performOperations();
+
+    return 0;
+}
+----------------------------------------------------------------------
+C) Creat a BST and find inorder sucessor and inorder predecessor of specific node
+
+#include <iostream>
+#include <climits>
+using namespace std;
+
+class Node {
+public:
+    int data;
+    Node *left, *right;
+
+    Node(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BST {
+private:
+    Node *root;
+
+public:
+    BST() : root(nullptr) {}
+
+    Node *insert(Node *node, int value) {
+        if (node == nullptr) {
+            return new Node(value);
+        }
+
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        }
+
+        return node;
+    }
+
+    void insert(int value) {
+        root = insert(root, value);
+    }
+
+    void findMinMax(Node *node, int &minValue, int &maxValue) {
+        if (node == nullptr) {
+            return;
+        }
+
+        findMinMax(node->left, minValue, maxValue);
+
+        if (node->data < minValue) {
+            minValue = node->data;
+        }
+
+        if (node->data > maxValue) {
+            maxValue = node->data;
+        }
+
+        findMinMax(node->right, minValue, maxValue);
+    }
+
+    Node *findNode(Node *node, int key) {
+        if (node == nullptr || node->data == key) {
+            return node;
+        }
+
+        if (key < node->data) {
+            return findNode(node->left, key);
+        } else {
+            return findNode(node->right, key);
+        }
+    }
+
+    Node *findMin(Node *node) {
+        while (node->left != nullptr) {
+            node = node->left;
+        }
+        return node;
+    }
+
+    Node *findMax(Node *node) {
+        while (node->right != nullptr) {
+            node = node->right;
+        }
+        return node;
+    }
+
+    void findInorderSuccessorPredecessor(Node *node, int key, Node *&predecessor, Node *&successor) {
+        if (node == nullptr) {
+            return;
+        }
+
+        if (node->data == key) {
+            if (node->left != nullptr) {
+                predecessor = findMax(node->left);
+            }
+
+            if (node->right != nullptr) {
+                successor = findMin(node->right);
+            }
+
+            return;
+        }
+
+        if (key < node->data) {
+            successor = node;
+            findInorderSuccessorPredecessor(node->left, key, predecessor, successor);
+        } else {
+            predecessor = node;
+            findInorderSuccessorPredecessor(node->right, key, predecessor, successor);
+        }
+    }
+
+    void findInorderSuccessorPredecessor(int key) {
+        Node *predecessor = nullptr;
+        Node *successor = nullptr;
+
+        findInorderSuccessorPredecessor(root, key, predecessor, successor);
+
+        cout << "Inorder Predecessor of " << key << ": " << (predecessor ? to_string(predecessor->data) : "None") << endl;
+        cout << "Inorder Successor of " << key << ": " << (successor ? to_string(successor->data) : "None") << endl;
+    }
+
+    void performOperations() {
+        cout << "BST created with user input.\n";
+
+        int minValue = INT_MAX;
+        int maxValue = INT_MIN;
+
+        findMinMax(root, minValue, maxValue);
+
+        cout << "Minimum value in the BST: " << minValue << endl;
+        cout << "Maximum value in the BST: " << maxValue << endl;
+
+        int key;
+        cout << "Enter a node value to find its inorder successor and predecessor: ";
+        cin >> key;
+
+        Node *foundNode = findNode(root, key);
+
+        if (foundNode) {
+            findInorderSuccessorPredecessor(key);
+        } else {
+            cout << "Node with value " << key << " not found in the BST.\n";
+        }
+    }
+};
+
+int main() {
+    BST bst;
+    int n, value;
+
+    cout << "Enter the number of nodes in the BST: ";
+    cin >> n;
+
+    cout << "Enter the values of the nodes:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> value;
+        bst.insert(value);
+    }
+
+    bst.performOperations();
+
+    return 0;
+}
+----------------------------------------------------------------------
+
+
+D) Construct a binary search tree by accepting at least 5 numbers from user and write the definition of function that returns the constructed binary search tree is height balanced or not
+#include <iostream>
+using namespace std;
+
+class TreeNode {
+public:
+    int data;
+    TreeNode *left, *right;
+
+    TreeNode(int value) : data(value), left(nullptr), right(nullptr) {}
+};
+
+class BST {
+private:
+    TreeNode *root;
+
+public:
+    BST() : root(nullptr) {}
+
+    TreeNode *insert(TreeNode *node, int value) {
+        if (node == nullptr) {
+            return new TreeNode(value);
+        }
+
+        if (value < node->data) {
+            node->left = insert(node->left, value);
+        } else if (value > node->data) {
+            node->right = insert(node->right, value);
+        }
+
+        return node;
+    }
+
+    void insert(int value) {
+        root = insert(root, value);
+    }
+
+    int getHeight(TreeNode *node) {
+        if (node == nullptr) {
+            return 0;
+        }
+
+        int leftHeight = getHeight(node->left);
+        int rightHeight = getHeight(node->right);
+
+        return (leftHeight > rightHeight) ? (leftHeight + 1) : (rightHeight + 1);
+    }
+
+    bool isHeightBalanced(TreeNode *node) {
+        if (node == nullptr) {
+            return true;
+        }
+
+        int leftHeight = getHeight(node->left);
+        int rightHeight = getHeight(node->right);
+
+        int balanceFactor = (leftHeight > rightHeight) ? (leftHeight - rightHeight) : (rightHeight - leftHeight);
+
+        return (balanceFactor <= 1) && isHeightBalanced(node->left) && isHeightBalanced(node->right);
+    }
+
+    bool isBSTHeightBalanced() {
+        return isHeightBalanced(root);
+    }
+};
+
+int main() {
+    BST bst;
+    int n, value;
+
+    cout << "Enter at least 5 numbers to construct a BST:\n";
+    for (int i = 0; i < 5; i++) {
+        cin >> value;
+        bst.insert(value);
+    }
+
+    if (bst.isBSTHeightBalanced()) {
+        cout << "The constructed BST is height-balanced.\n";
+    } else {
+        cout << "The constructed BST is not height-balanced.\n";
+    }
+    return 0;
+}
+----------------------------------------------------------------------
+B) Deletion
+#include <bits/stdc++.h>
+using namespace std;
+
+struct Node {
+   struct Node *left, *right;
+   int data;
+
+   // false if the left pointer points to a predecessor of in Inorder Traversal
+   bool leftThread;
+
+   // false if the right pointer points to a predecessor of in Inorder Traversal
+   bool rightThread;
+};
+
+// For inserting a Node in Threaded Binary Tree
+struct Node* insert(struct Node* root, int key)
+{
+   // Searching for a Node with given value
+   Node* current = root;
+   Node* parent = NULL;
+   while (current != NULL) {
+       // If value already exists, then we will return the root
+       if (key == (current->data)) {
+           printf("Duplicate value !\n");
+           return root;
+       }
+
+       // Updating the parent pointer
+       parent = current;  
+       // Taking the left subtree
+       if (key < current->data) {
+           if (current->leftThread == false)
+               current = current->left;
+           else
+               break;
+       }
+
+       // Taking the right subtree
+       else {
+           if (current->rightThread == false)
+               current = current->right;
+           else
+               break;
+       }
+   }
+
+   // Creating a new Node
+   Node* temp = new Node;
+   temp->data = key;
+   temp->leftThread = true;
+   temp->rightThread = true;
+
+   if (parent == NULL) {
+       root = temp;
+       temp->left = NULL;
+       temp->right = NULL;
+   }
+   else if (key < (parent->data)) {
+       temp->left = parent->left;
+       temp->right = parent;
+       parent->leftThread = false;
+       parent->left = temp;
+   }
+   else {
+       temp->left = parent;
+       temp->right = parent->right;
+       parent->rightThread = false;
+       parent->right = temp;
+   }
+
+   return root;
+}
+
+// For returning the inorder successor using left and right children 
+struct Node* inSucc(struct Node* current)
+{
+   if (current->rightThread == true)
+       return current->right;
+
+   current = current->right;
+   while (current->leftThread == false)
+       current = current->left;
+
+   return current;
+}
+
+// For returning inorder successor using rightThread 
+struct Node* inorderSuccessor(struct Node* current)
+{
+   // If rightThread is set, we can quickly find
+   if (current->rightThread == true)
+       return current->right;
+
+   // Or return the leftmost child of right subtree
+   current = current->right;
+   while (current->leftThread == false)
+       current = current->left;
+   return current;
+}
+
+// Print the threaded tree
+void inorder(struct Node* root)
+{
+   if (root == NULL)
+       printf("Tree is empty");
+
+   // Taking leftmost Node
+   struct Node* current = root;
+   while (current->leftThread == false)
+       current = current->left;
+
+   while (current != NULL) {
+       printf("%d ", current->data);
+       current = inorderSuccessor(current);
+   }
+}
+
+struct Node* inPred(struct Node* current)
+{
+   if (current->leftThread == true)
+       return current->left;
+
+   current = current->left;
+   while (current->rightThread == false)
+       current = current->right;
+   return current;
+}
+
+// Here 'parent ' is a pointer referring to the parent node 
+// and 'current' is a pointer to the current node.
+struct Node* case1(struct Node* root, struct Node* parent,struct Node* current)
+{
+   // If root node has to be deleted
+   if (parent == NULL)
+       root = NULL;
+
+   // If the node to be deleted is left child of its parent
+   else if (current == parent->left) {
+       parent->leftThread = true;
+       parent->left = current->left;
+   }
+
+   // If the node to be deleted is the right child of its parent
+   else {
+       parent->rightThread = true;
+       parent->right = current->right;
+   }
+
+   // Now memory is freed and new root is returned
+   free(current);
+   return root;
+}
+
+// Here 'parent ' is a pointer referring to the parent node 
+// and 'current' is a pointer to the current node.
+struct Node* case2 (struct Node* root, struct Node* parent, struct Node* current)               
+{
+   struct Node* child;
+   // First initialize whether the child Node to be deleted has left child.
+   if (current->leftThread == false)
+       child = current->left;
+
+   // or a right child
+   else
+       child = current->right;
+
+   // If root node has to be deleted
+   if (parent  == NULL)
+       root = child;
+
+   // If the node to be deleted is left child of its parent
+   else if (current == parent ->left)
+       parent ->left = child;
+
+   // If the node to be deleted is right child of its parent
+   else
+       parent ->right = child;
+
+   // Find successor and predecessor
+   Node* s = inSucc(current);
+   Node* p = inPred(current);
+
+   // If current node has left subtree
+   if (current->leftThread == false)
+       p->right = s;
+
+   // If current node has right subtree.
+   else {
+       if (current->rightThread == false)
+           s->left = p;
+   }
+
+   // Now memory is freed and new root is returned
+   free(current);
+   return root;
+}
+
+// Here 'parent' is a pointer referring to the parent node 
+// and 'current' is a pointer to the current node
+struct Node* case3(struct Node* root, struct Node* parent,  struct Node* current)
+{
+   // Find the inorder successor 
+   struct Node* parsucc = current;
+   struct Node* succ = current->right;
+
+   // Find the leftmost child 
+   while (succ->leftThread==false) {
+       parsucc = succ;
+       succ = succ->left;
+   }
+
+   current->data = succ->data;
+
+   if (succ->leftThread == true && succ->rightThread == true)
+       root = case1(root, parsucc, succ);
+   else
+       root = case2(root, parsucc, succ);
+
+   return root;
+}
+
+// For deleting the value from threaded BST with the given root 
+// and returning a new root of BST
+
+struct Node* dThreadedBST(struct Node* root, int value)
+{
+   // For initializing the parent node as NULL and current node as root.
+   struct Node *parent  = NULL, *current = root;
+
+   // Set true if value is found
+   int found = 0;
+
+   // Searching value in BST 
+   while (current != NULL) {
+       if (value == current->data) {
+           found = 1;
+           break;
+       }
+       parent  = current;
+       if (value < current->data) {
+           if (current->leftThread == false)
+               current = current->left;
+           else
+               break;
+       }
+       else {
+           if (current->rightThread == false)
+               current = current->right;
+           else
+               break;
+       }
+   }
+
+   if (found == 0)
+       printf("The value not present in tree\n");
+
+   // When the node to be deleted has two children
+   else if (current->leftThread == false && current->rightThread == false)
+       root = case3(root, parent , current);
+
+   // When the node to be deleted has only left child
+   else if (current->leftThread == false)
+       root = case2(root, parent , current);
+
+   // When the node to be deleted has only right child
+   else if (current->rightThread == false)
+       root = case2(root, parent , current);
+
+   // When a leaf node needs to be deleted
+   else
+       root = case1(root, parent , current);
+
+   return root;
+}
+// Driver Program
+int main()
+{
+   struct Node* root = NULL;
+
+   root = insert(root, 45);
+   root = insert(root, 8);
+   root = insert(root, 24);
+   root = insert(root, 20);
+   root = insert(root, 15);
+   root = insert(root, 30);
+   root = insert(root, 23);
+   root = insert(root, 18);
+
+   root = dThreadedBST(root, 24);
+   inorder(root);
+
+   return 0;
+}
+--------------------------------------------------------------------------------------------------------------------------------------
+
+Q5
+Adjacency Matrix
+(weighted graph)
+#include<iostream>
+using namespace std;
+
+int main(){
+    int u,v,a,b;
+    cout<<"Enter the number of vertices: ";
+    cin>>v;
+    cout<<"Enter the number of edges: ";
+    cin>>u;
+    int adj[v+1][v+1];
+    for (int i = 0; i<=v; i++) {
+    for (int j = 0; j<=v; j++) {
+      adj[i][j] = 0;
+    }
+  }
+    int w;
+    char c1,c2;
+    for(int i=0;i<u;i++){
+        cout<<"Enter the edge :"<<i<<" ";
+        cin>>c1;
+        cin>>c2;
+        a=c1-65;
+        b=c2-65;
+        cout<<"Enter the weight: ";
+        cin>>w;
+        adj[a][b]=w;
+        adj[b][a]=w;
+    }
+    
+    char ch='A';
+    cout<<"  ";
+    for(int i=0;i<v;i++){
+        cout<<ch<<" ";
+        ch++;
+    }
+    cout<<endl;
+    ch='A';
+    for(int i=0;i<v;i++){
+        cout<<ch<<" ";
+        for(int j=0;j<v;j++){
+            cout<<adj[i][j]<<" ";
+        }
+        cout<<endl;
+        ch++;
+    } 
+}
+
+Output…
+Enter the number of vertices: 4
+Enter the number of edges: 5
+Enter the edge 0: A B
+Enter the weight: 1
+Enter the edge 1: A C
+Enter the weight: 2
+Enter the edge 2: B C
+Enter the weight: 3
+Enter the edge 3: B D
+Enter the weight: 4
+Enter the edge 4: C D
+Enter the weight: 5
+
+  A B C D 
+A 0 1 2 0 
+B 1 0 3 4 
+C 2 3 0 5 
+D 0 4 5 0
+
+
+
+(Un-weighted graph)
+
+#include <iostream>
+using namespace std;
+
+int** createAdjacencyMatrix(int numVertices) { 
+    int** adjacencyMatrix = new int*[numVertices];
+    for (int i = 0; i < numVertices; ++i) {
+        adjacencyMatrix[i] = new int[numVertices]; 
+        for (int j = 0; j < numVertices; ++j) {
+            adjacencyMatrix[i][j] = 0;
+        }
+    }
+    return adjacencyMatrix;
+}
+void addEdge(int** adjacencyMatrix, int source, int destination) {
+   
+    adjacencyMatrix[source][destination] = 1;
+    adjacencyMatrix[destination][source] = 1;
+}
+
+
+void printAdjacencyMatrix(int** adjacencyMatrix, int numVertices) {
+    for (int i = 0; i < numVertices; ++i) {
+        for (int j = 0; j < numVertices; ++j) {
+            cout << adjacencyMatrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+void deleteAdjacencyMatrix(int** adjacencyMatrix, int numVertices) {
+    for (int i = 0; i < numVertices; ++i) {
+        delete[] adjacencyMatrix[i];
+    }
+    delete[] adjacencyMatrix;
+}
+
+int main() {
+    int numVertices, numEdges;
+    cout << "Enter the number of vertices: ";
+    cin >> numVertices;
+    cout << "Enter the number of edges: ";
+    cin >> numEdges;
+    int** adjacencyMatrix = createAdjacencyMatrix(numVertices);
+    cout << "Enter the edges (source destination):" << endl;
+    for (int i = 0; i < numEdges; ++i) {
+        int source, destination;
+        cin >> source >> destination;
+        addEdge(adjacencyMatrix, source, destination);
+    }
+    cout << "Adjacency Matrix:" << endl;
+    printAdjacencyMatrix(adjacencyMatrix, numVertices);
+    deleteAdjacencyMatrix(adjacencyMatrix, numVertices);
+    return 0;
+}
+Output…
+Enter the number of vertices: 4
+Enter the number of edges: 3
+Enter the edges (source destination):
+0 1
+1 2
+2 3
+Adjacency Matrix:
+0 1 0 0 
+1 0 1 0 
+0 1 0 1 
+0 0 1 0
+
+Adjacency List
+
+
+#include <iostream>
+
+using namespace std;
+
+const int MAX_VERTICES = 26;
+
+class Graph {
+    int vertices;
+    int adjacency[MAX_VERTICES][MAX_VERTICES];
+
+public:
+    Graph() {
+        vertices = 0;
+        for (int i = 0; i < MAX_VERTICES; i++) {
+            for (int j = 0; j < MAX_VERTICES; j++) {
+                adjacency[i][j] = 0;
+            }
+        }
+    }
+
+    void add_edge(char u, char v) {
+        int index_u = u - 'a';
+        int index_v = v - 'a';
+        adjacency[index_u][index_v] = 1;
+        adjacency[index_v][index_u] = 1; // For undirected graph
+        if (index_u >= vertices) vertices = index_u + 1;
+        if (index_v >= vertices) vertices = index_v + 1;
+    }
+
+    void print() {
+        for (int i = 0; i < vertices; i++) {
+            cout << (char)('a' + i) << ": ";
+            for (int j = 0; j < vertices; j++) {
+                if (adjacency[i][j] == 1) {
+                    cout << (char)('a' + j) << "->";
+                }
+            }
+            cout << "Null" << endl;
+        }
+    }
+};
+
+int main() {
+    Graph g;
+    int vert, e;
+    char u, v;
+
+    cout << "Enter the number of vertices: ";
+    cin >> vert;
+
+    cout << "Enter the number of edges: ";
+    cin >> e;
+
+    for (int i = 0; i < e; i++) {
+        cin >> u >> v;
+        g.add_edge(u, v);
+    }
+
+    g.print();
+
+    return 0;
+}
+
+Output…
+Enter the number of vertices: 4
+Enter the number of edges: 5
+a b
+a c
+b c
+b d
+c d
+a: b->c->Null
+b: a->c->d->Null
+c: a->b->d->Null
+d: b->c->Null
+
+
+
+(BFS with adjacency list)
+#include <iostream>
+
+using namespace std;
+
+const int MAX_VERTICES = 26;
+
+class Graph{
+    int g[MAX_VERTICES][MAX_VERTICES];
+    int vertices;
+public:
+    Graph(){
+        vertices = 0;
+        for(int i = 0; i < MAX_VERTICES; ++i){
+            for(int j = 0; j < MAX_VERTICES; ++j){
+                g[i][j] = 0;
+            }
+        }
+    }
+
+    void add_edge(char u, char v){
+        int index_u = u - 'a';
+        int index_v = v - 'a';
+        g[index_u][index_v] = 1;
+        g[index_v][index_u] = 1; // For undirected graph
+        if(index_u >= vertices) vertices = index_u + 1;
+        if(index_v >= vertices) vertices = index_v + 1;
+    }
+
+    void print(){
+        for(int i = 0; i < vertices; ++i){
+            cout << (char)('a' + i) << ": ";
+            for(int j = 0; j < vertices; ++j){
+                if(g[i][j] == 1){
+                    cout << (char)('a' + j) << "->";
+                }
+            }
+            cout << "Null" << endl;
+        }
+    }
+
+    void BFS(char source, bool visited[]){
+        int queue[MAX_VERTICES], front = 0, rear = -1;
+        queue[++rear] = source;
+        visited[source - 'a'] = true;
+        while(front <= rear){
+            char frontNode = queue[front++];
+            cout << frontNode << " ";
+            for(int i = 0; i < vertices; ++i){
+                if(g[frontNode - 'a'][i] && !visited[i]){
+                    queue[++rear] = i + 'a';
+                    visited[i] = true;
+                }
+            }
+        }
+    }
+
+    void BFS2(bool visited[]){
+        for(int i = 0; i < vertices; ++i){
+            if(!visited[i]){
+                BFS('a' + i, visited);
+            }
+        }
+    }
+};
+
+int main(){
+    Graph g;
+    int vert, e;
+    char u, v;
+    bool visited[MAX_VERTICES] = {false};
+
+    cout << "Enter the number of vertices: ";
+    cin >> vert;
+
+    cout << "Enter the number of edges: ";
+    cin >> e;
+
+    for(int i = 0; i < e; ++i){
+        cin >> u >> v;
+        g.add_edge(u, v);
+    }
+    g.print();
+    
+    g.BFS2(visited);
+
+    return 0;
+}
+Output…
+Enter the number of vertices: 4
+Enter the number of edges: 5
+a b
+a c
+b c
+b d
+c d
+a: b->c->Null
+b: a->c->d->Null
+c: a->b->d->Null
+d: b->c->Null
+a b c d 
+
+
+(DFS with adjacency list)
+
+#include <iostream>
+
+using namespace std;
+
+const int MAX_VERTICES = 1000; // Adjust the size according to your needs
+
+class Graph {
+    int g[MAX_VERTICES][MAX_VERTICES];
+    int vertices;
+
+public:
+    Graph() {
+        vertices = 0;
+        for (int i = 0; i < MAX_VERTICES; ++i) {
+            for (int j = 0; j < MAX_VERTICES; ++j) {
+                g[i][j] = 0;
+            }
+        }
+    }
+
+    void add_edge(int u, int v) {
+        g[u][v] = 1;
+        g[v][u] = 1; // For undirected graph
+        if (u >= vertices) vertices = u + 1;
+        if (v >= vertices) vertices = v + 1;
+    }
+
+    void print() {
+        for (int i = 0; i < vertices; ++i) {
+            cout << i << ": ";
+            for (int j = 0; j < vertices; ++j) {
+                if (g[i][j] == 1) {
+                    cout << j << "->";
+                }
+            }
+            cout << "Null" << endl;
+        }
+    }
+
+    void DFS() {
+        int st[MAX_VERTICES], top = -1;
+        bool visited[MAX_VERTICES] = {false};
+        st[++top] = 1;
+        int topNode;
+        while (top != -1) {
+            topNode = st[top--];
+            if (!visited[topNode]) {
+                cout << topNode << " ";
+                visited[topNode] = true;
+                for (int i = 0; i < vertices; ++i) {
+                    if (g[topNode][i] && !visited[i]) {
+                        st[++top] = i;
+                    }
+                }
+            }
+        }
+    }
+};
+
+int main() {
+    Graph g;
+    int vert, e, u, v;
+    cout << "Enter the number of vertices: ";
+    cin >> vert;
+
+    cout << "Enter the number of edges: ";
+    cin >> e;
+
+    for (int i = 0; i < e; ++i) {
+        cin >> u >> v;
+        g.add_edge(u, v);
+    }
+    g.print();
+    g.DFS();
+
+    return 0;
+}
+Output…
+Enter the number of vertices: 4
+Enter the number of edges: 5
+1 2
+1 3
+2 3
+2 4
+3 4
+0: Null
+1: 2->3->Null
+2: 1->3->4->Null
+3: 1->2->4->Null
+4: 2->3->Null
+1 3 4 2
+
+
+Kruskals
+
+#include<iostream>
+
+using namespace std;
+
+const int MAX_VERTICES = 20;
+
+void make_set(char parent[], int rank[], char vertex[], int vert) {
+    for (int i = 0; i < vert; i++) {
+        parent[vertex[i] - 'a'] = vertex[i];
+        rank[vertex[i] - 'a'] = 0;
+    }
+}
+
+char find_set(char u, char parent[]) {
+    if (u != parent[u - 'a']) {
+        parent[u - 'a'] = find_set(parent[u - 'a'], parent);
+    }
+    return parent[u - 'a'];
+}
+
+void unionSet(char u, char v, char parent[], int rank[]) {
+    u = find_set(u, parent);
+    v = find_set(v, parent);
+
+    if (rank[u - 'a'] < rank[v - 'a']) {
+        parent[u - 'a'] = v;
+    }
+    else if (rank[u - 'a'] > rank[v - 'a']) {
+        parent[v - 'a'] = u;
+    }
+    else {
+        parent[u - 'a'] = v;
+        rank[v - 'a']++;
+    }
+}
+
+int main() {
+    pair<int, pair<char, char>> p[MAX_VERTICES];
+    int vert, e;
+    cout << "Enter the number of vertices: " << endl;
+    cin >> vert;
+    cout << "Enter the number of edges: " << endl;
+    cin >> e;
+    char parent[MAX_VERTICES];
+    int rank[MAX_VERTICES];
+
+    char u, v;
+    int w;
+    for (int i = 0; i < e; i++) {
+        cin >> u >> v >> w;
+        p[i] = make_pair(w, make_pair(u, v));
+    }
+
+    for (int i = 0; i < e - 1; i++) {
+        for (int j = 0; j < e - i - 1; j++) {
+            if (p[j].first > p[j + 1].first) {
+                auto temp = p[j + 1];
+                p[j + 1] = p[j];
+                p[j] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i < e; i++) {
+        cout << p[i].first << " " << p[i].second.first << " " << p[i].second.second << endl;
+    }
+    char vertices;
+    cout << "Enter the vertices: " << endl;
+    for (int i = 0; i < vert; i++) {
+        cin >> vertices;
+        parent[i] = vertices;
+    }
+    make_set(parent, rank, parent, vert);
+    int sum = 0;
+    cout << "The Minimum Spanning tree is: " << endl;
+    for (int i = 0; i < e; i++) {
+        if (find_set(p[i].second.first, parent) != find_set(p[i].second.second, parent)) {
+            unionSet(p[i].second.first, p[i].second.second, parent, rank);
+            cout << p[i].first << " " << p[i].second.first << " " << p[i].second.second << endl;
+            sum += p[i].first;
+        }
+    }
+    cout << "Minimum Cost is: " << sum << endl;
+
+    return 0;
+}
+
+Output…
+Enter the number of vertices: 
+4
+Enter the number of edges: 
+5
+a b 1
+a c 2
+b c 3
+b d 4
+c d 5
+1 a b
+2 a c
+3 b c
+4 b d
+5 c d
+Enter the vertices: 
+a b c d
+The Minimum Spanning tree is: 
+1 a b
+2 a c
+4 b d
+Minimum Cost is: 7
+
+
+
+
+
+Prims
+#include<iostream>
+#include<climits>
+
+using namespace std;
+
+const int MAX_VERTICES = 100;
+
+class Graph {
+    struct Node {
+        char vertex;
+        int weight;
+        Node* next;
+        Node(char v, int w): vertex(v), weight(w), next(nullptr) {}
+    };
+
+    Node* g[MAX_VERTICES];
+
+public:
+    Graph() {
+        for (int i = 0; i < MAX_VERTICES; ++i) {
+            g[i] = nullptr;
+        }
+    }
+
+    void add_key(char u, char v, int w) {
+        Node* node1 = new Node(v, w);
+        node1->next = g[u - 'a'];
+        g[u - 'a'] = node1;
+
+        Node* node2 = new Node(u, w);
+        node2->next = g[v - 'a'];
+        g[v - 'a'] = node2;
+    }
+
+    void MST(int v, char source) {
+        int key[MAX_VERTICES];
+        int parent[MAX_VERTICES];
+        bool visited[MAX_VERTICES] = {false};
+
+        for (int i = 0; i < v; ++i) {
+            key[i] = INT_MAX;
+            parent[i] = -1;
+        }
+
+        key[source - 'a'] = 0;
+        for (int i = 0; i < v - 1; ++i) {
+            char u;
+            int mini = INT_MAX;
+
+            for (int j = 0; j < v; ++j) {
+                if (!visited[j] && key[j] < mini) {
+                    u = j + 'a';
+                    mini = key[j];
+                }
+            }
+
+            visited[u - 'a'] = true;
+            Node* current = g[u - 'a'];
+            while (current != nullptr) {
+                if (!visited[current->vertex - 'a'] && current->weight < key[current->vertex - 'a']) {
+                    parent[current->vertex - 'a'] = u - 'a';
+                    key[current->vertex - 'a'] = current->weight;
+                }
+                current = current->next;
+            }
+        }
+
+        int sum = 0;
+        cout << "Minimum Spanning Tree is: " << endl;
+        for (int i = 0; i < v; ++i) {
+            if (parent[i] != -1) {
+                cout << (char)('a' + parent[i]) << " " << (char)('a' + i) << " " << key[i] << endl;
+                sum += key[i];
+            }
+        }
+        cout << "Minimum Cost is: " << sum << endl;
+    }
+};
+
+int main() {
+    Graph g;
+    int vert, e, w;
+    cout << "Enter the number of vertices: " << endl;
+    cin >> vert;
+    cout << "Enter the number of edges: " << endl;
+    cin >> e;
+    char u, v, source;
+    for (int i = 0; i < e; i++) {
+        cin >> u >> v >> w;
+        g.add_key(u, v, w);
+        if (i == 0) {
+            source = u;
+        }
+    }
+    g.MST(vert, source);
+    
+    return 0;
+}
+
+Output…
+Enter the number of vertices: 
+4
+Enter the number of edges: 
+5
+a b 1\
+
+a c 2
+b c 3
+b d 4
+c d 5
+Minimum Spanning Tree is: 
+a b 1
+a c 2
+b d 4
+Minimum Cost is: 7
+
+Dijkstras
+#include<iostream>
+#include <climits>
+
+using namespace std;
+
+const int MAX_VERTICES = 26; // Assuming maximum number of vertices is 26 for characters 'a' to 'z'
+
+class Graph {
+    struct Node {
+        char vertex;
+        int weight;
+        Node* next;
+        Node(char v, int w): vertex(v), weight(w), next(nullptr) {}
+    };
+
+    Node* g[MAX_VERTICES];
+
+public:
+    Graph() {
+        for (int i = 0; i < MAX_VERTICES; ++i) {
+            g[i] = nullptr;
+        }
+    }
+
+    void add_key(char u, char v, int w) {
+        Node* node1 = new Node(v, w);
+        node1->next = g[u - 'a'];
+        g[u - 'a'] = node1;
+
+        Node* node2 = new Node(u, w);
+        node2->next = g[v - 'a'];
+        g[v - 'a'] = node2;
+    }
+
+    void dijkstras(char source, int v) {
+        int dist[MAX_VERTICES];
+        bool visited[MAX_VERTICES] = {false};
+
+        for (int i = 0; i < v; ++i) {
+            dist[i] = INT_MAX;
+        }
+        dist[source - 'a'] = 0;
+
+        for (int i = 0; i < v - 1; ++i) {
+            int minDist = INT_MAX, minIndex;
+            for (int j = 0; j < v; ++j) {
+                if (!visited[j] && dist[j] < minDist) {
+                    minDist = dist[j];
+                    minIndex = j;
+                }
+            }
+
+            visited[minIndex] = true;
+            Node* current = g[minIndex];
+            while (current != nullptr) {
+                if (!visited[current->vertex - 'a'] && dist[minIndex] + current->weight < dist[current->vertex - 'a']) {
+                    dist[current->vertex - 'a'] = dist[minIndex] + current->weight;
+                }
+                current = current->next;
+            }
+        }
+
+        cout << "Node  distance" << endl;
+        for (int i = 0; i < v; ++i) {
+            cout << (char)('a' + i) << "      " << dist[i] << " " << endl;
+        }
+    }
+};
+
+int main() {
+    Graph g;
+    int vert, e, w;
+    cout << "Enter the number of vertices: " << endl;
+    cin >> vert;
+    cout << "Enter the number of edges: " << endl;
+    cin >> e;
+
+    char u, v;
+    char source;
+    for (int i = 0; i < e; i++) {
+        cin >> u >> v >> w;
+        g.add_key(u, v, w);
+    }
+
+    cout << "Enter the source: " << endl;
+    cin >> source;
+    g.dijkstras(source, vert);
+
+    return 0;
+}
+Output…
+Enter the number of vertices: 
+4
+Enter the number of edges: 
+5
+a b 1
+a c 2
+b c 3
+b d 4
+c d 5
+Enter the source: 
+a
+Node  distance
+a      0 
+b      1 
+c      2 
+d      5
+
+
+Hashtable-linear probing without replacement
+#include<iostream>
+using namespace std;
+
+//without replacement
+class Hashtable {
+    pair<int, int> arr[10];
+public:
+    Hashtable() {
+        for (int i = 0; i < 10; i++) {
+            arr[i] = make_pair(-1, 0);
+        }
+    }
+    int hashfunc(int key) {
+        return key % 10;
+    }
+    void insert(int key) {
+        int pos = hashfunc(key);
+        int probe = 1;
+        if (arr[pos].first == -1) {
+            arr[pos].first = key;
+            arr[pos].second = probe;
+        } else {
+            int i = (pos + 1) % 10; // Start probing from the next index
+            while (i != pos) {
+                probe++;
+                if (arr[i].first == -1) {
+                    arr[i].first = key;
+                    arr[i].second = probe;
+                    return;
+                }
+                i = (i + 1) % 10; // Move to the next index
+            }
+            cout << "HashTable Full";
+        }
+    }
+    void display() {
+        cout << "index  key  probe " << endl;
+        for (int i = 0; i < 10; i++) {
+            cout << i << "       " << arr[i].first << "     " << arr[i].second << endl;
+        }
+    }
+};
+int main() {
+    Hashtable h1;
+    int key;
+    for (int i = 0; i < 10; i++) {
+        cin >> key;
+        h1.insert(key);
+    }
+    cout << "This Hash Table is Given Below: " << endl;
+    h1.display();
+}
+Output…
+1 5 15 25 35 45 55 65 75 85
+This Hash Table is Given Below: 
+index  key  probe 
+0       55     6
+1       1     1
+2       65     8
+3       75     9
+4       85     10
+5       5     1
+6       15     2
+7       25     3
+8       35     4
+9       45     5
+
+Hashtable-linear probing with replacement
+
+#include<iostream>
+using namespace std;
+//with repalcement
+class Hashtable{
+    pair<int,int> arr[10];
+    public:
+    Hashtable(){
+        for(int i=0;i<10;i++){
+            arr[i]=make_pair(-1,0);
+        }
+    }
+    int hashfunc(int key){
+        return key%10;
+    }
+    void insert(int key){
+        int pos=hashfunc(key);
+        int probe=1;
+        if(arr[pos].first==-1){
+            arr[pos].first=key;
+            arr[pos].second=probe;
+        }
+        else{
+            int key2=arr[pos].first;
+            if(hashfunc(key2)!=pos){
+                    probe=arr[pos].second;
+
+                for(int i=pos+1;i%10!=pos;i++){
+                    
+                    probe++;
+                    if(arr[i].first==-1){
+                        arr[i].first=key2;
+                        arr[i].second=probe;
+                        arr[pos].first=key;
+                        arr[pos].second=1;
+                        return ;
+                    }
+                }
+            }
+            else{
+                for(int i=pos+1;i%10!=pos;i++){
+                probe++;
+                if(arr[i].first==-1){
+                arr[i].first=key;
+                arr[i].second=probe;
+                return ;
+                }
+                }
+            }
+            
+            //cout<<"HashTable Full";
+        }
+    }
+    void display(){
+        cout<<"index  key  probe "<<endl;
+        for(int i=0;i<10;i++){
+            cout<<i<<"       "<<arr[i].first<<"     "<<arr[i].second<<endl;
+        }
+    }
+};
+int main(){
+    Hashtable h1;
+    int key;
+    for(int i=0;i<10;i++){
+        cin>>key;
+        h1.insert(key);
+    }
+    //cout<<"This Hash Table is Given Below: "<<endl;
+    h1.display();
+}
+
+1 5 15 25 35 45 55 65 75 85
+index  key  probe 
+0       -1     0
+1       1     1
+2       -1     0
+3       -1     0
+4       -1     0
+5       5     1
+6       15     2
+7       25     3
+8       35     4
+9       45     5
+
+
+
+Hashtable-seperate chaining
+
+#include<iostream>
+#include<list>
+using namespace std;
+class Hashtable{
+    list<int> arr[10];
+
+    public:
+    int hashfunc(int key){
+        return key%10;
+    }
+    void insert(int key){
+        int pos = hashfunc(key);
+        arr[pos].push_back(key);
+    }
+    void display(){
+        for(int i=0;i<10;i++){
+            cout<<"Index "<<i<<": ";
+            for(auto it: arr[i]){
+                cout<<it<<"->";
+            }
+            cout<<"NULL"<<endl;
+        }
+    }
+
+};
+int main(){
+    int key;
+    Hashtable h1;
+    for(int i=0;i<10;i++){
+        cin>>key;
+        h1.insert(key);
+    }
+    cout<<"This Hash Table is Given Below: "<<endl;
+    h1.display();
+}
+Output…
+3 2 76 56 1 8 66 22 90 34
+This Hash Table is Given Below: 
+Index 0: 90->NULL
+Index 1: 1->NULL
+Index 2: 2->22->NULL
+Index 3: 3->NULL
+Index 4: 34->NULL
+Index 5: NULL
+Index 6: 76->56->66->NULL
+Index 7: NULL
+Index 8: 8->NULL
+Index 9: NULL
+
+Q10 Max and Min heap…
+#include <iostream>
+
+void maxHeapify(int arr[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    if (largest != i) {
+        std::swap(arr[i], arr[largest]);
+        maxHeapify(arr, n, largest);
+    }
+}
+
+void minHeapify(int arr[], int n, int i) {
+    int smallest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] < arr[smallest])
+        smallest = left;
+
+    if (right < n && arr[right] < arr[smallest])
+        smallest = right;
+
+    if (smallest != i) {
+        std::swap(arr[i], arr[smallest]);
+        minHeapify(arr, n, smallest);
+    }
+}
+
+void buildMaxHeap(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        maxHeapify(arr, n, i);
+    }
+}
+
+void buildMinHeap(int arr[], int n) {
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        minHeapify(arr, n, i);
+    }
+}
+
+void heapSortDescending(int arr[], int n) {
+    buildMaxHeap(arr, n);
+    for (int i = n - 1; i > 0; i--) {
+        std::swap(arr[0], arr[i]);
+        maxHeapify(arr, i, 0);
+    }
+}
+
+void heapSortAscending(int arr[], int n) {
+    buildMinHeap(arr, n);
+    for (int i = n - 1; i > 0; i--) {
+        std::swap(arr[0], arr[i]);
+        minHeapify(arr, i, 0);
+    }
+}
+
+int main() {
+    int size;
+    std::cout << "Enter the size of the heap: ";
+    std::cin >> size;
+
+    int *maxHeap = new int[size];
+    int *minHeap = new int[size];
+
+    std::cout << "Enter " << size << " elements: ";
+    for (int i = 0; i < size; i++) {
+        std::cin >> maxHeap[i];
+        minHeap[i] = maxHeap[i];
+    }
+
+    heapSortDescending(maxHeap, size);
+    heapSortAscending(minHeap, size);
+
+    std::cout << "Sorted Max heap (descending order): ";
+    for (int i = 0; i < size; i++) {
+        std::cout << maxHeap[i] << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Sorted Min heap (ascending order): ";
+    for (int i = 0; i < size; i++) {
+        std::cout << minHeap[i] << " ";
+    }
+    std::cout << std::endl;
+
+    delete[] maxHeap;
+    delete[] minHeap;
+
+    return 0;
+}
